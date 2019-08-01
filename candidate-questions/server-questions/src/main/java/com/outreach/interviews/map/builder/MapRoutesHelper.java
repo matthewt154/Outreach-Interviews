@@ -37,7 +37,7 @@ public class MapRoutesHelper
 		/**
 		 * Set the starting point
 		 * @param origin String representing the starting point
-		 * @return {@link RoutesBuilder}
+		 * @return {@link RoutesBuilder}  
 		 */
 		public RoutesBuilder setOrigin(String origin)  {
 			this.origin = origin;
