@@ -126,7 +126,8 @@ public class MapCoordinatesHelper {
 		}
 
 		private final String getAPIKey() {
-			return System.getenv("AIzaSyD8WtnBwxDPsHW7VwsxsBMie9uphGqQcSA");
+			return System.getenv("OUTREACH_MAPS_KEY"); 
+			//have to set environment variable to the API key
 		}
 		
 		
