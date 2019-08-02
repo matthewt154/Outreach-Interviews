@@ -2,7 +2,6 @@ package com.outreach.interviews.map.builder;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -16,7 +15,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.outreach.interviews.map.enums.MapModes;
 import com.outreach.interviews.map.enums.MapOperations;
 import com.outreach.interviews.map.enums.MapRegions;
 
@@ -77,7 +75,7 @@ public class MapCoordinatesHelper {
 		 */
 		public CoordinatesBuilder build() throws UnsupportedOperationException, IOException, IllegalArgumentException {
 			//the url needs and address and the API key, both of which can be referenced from private access methods below
-			String requestURL = this.getURL()  	+ "address=" + this.getAddress() 
+			String requestURL = this.getURL()  	+ "address=" + getAddress() 
 												+ "&key=" + this.getAPIKey();
 			
 			HttpGet httpGet = new HttpGet(requestURL);
@@ -100,7 +98,7 @@ public class MapCoordinatesHelper {
 		 * @return List of Strings lat + lng 
 		*/
 		public List<String> getLocation() {
-			if(this.operation.equals(MapOperations.geocode)) {
+			if(this.operation.equals(MapOperations.geocode)&& zeroResults(this.result)) {
 				List<String> list = new ArrayList<String>();
 				//going through the JSON file, will access lan and lng here
 				JsonObject coords = this.result.get("result").getAsJsonArray().get(0).getAsJsonObject()
@@ -115,6 +113,7 @@ public class MapCoordinatesHelper {
 				list.add(lng.getAsString()); //adding longitude to the list
 
 				return list;
+				
 			} else {
 				//will not return directions
 				throw new IllegalArgumentException("Does not support " + MapOperations.directions.name());
@@ -145,6 +144,8 @@ public class MapCoordinatesHelper {
 			return this.region.name();
 		}
 		
-		
+		private final boolean zeroResults(JsonObject obj) {
+			return !obj.get("status").getAsString().equals("ZERO_RESULTS");
+		}
 	}
 }
