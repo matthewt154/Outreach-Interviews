@@ -29,7 +29,7 @@ public class MapCoordinatesHelper {
 		private MapOperations operation;
 		private JsonObject result;
 
-		private final String URL = "https://maps.googleapis.com/maps/api/geocode"; //this is the URL needed to access API, find geocode
+		private final String URL = "https://maps.googleapis.com/maps/api/"; //this is the URL needed to access API, find geocode
 		private CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		/**
@@ -59,7 +59,8 @@ public class MapCoordinatesHelper {
 		 * @return {@link RoutesBuilder}
 		 */
 		public CoordinatesBuilder setURL(MapOperations type) {
-			if(type.equals(MapOperations.directions)) //will not allow for directions in this case
+			//will not allow for directions in this case
+			if(type.equals(MapOperations.directions)) 
 				throw new UnsupportedOperationException();
 
 			this.operation = type;
@@ -69,14 +70,14 @@ public class MapCoordinatesHelper {
 
 		/**
 		 * Perform the HTTP request and retrieve the data from the HttpClient object
-		 * @return {@link RoutesBuilder}  
+		 * @return {@link CoordinatesBuilder}  
 		 * @throws UnsupportedOperationException Thrown to indicate that the requested operation is not supported.
 		 * @throws IOException Thrown to indicate that the requested operation is not supported.
 		 * @throws IllegalArgumentException Thrown to indicate that a method has been passed an illegal orinappropriate argument.
 		 */
 		public CoordinatesBuilder build() throws UnsupportedOperationException, IOException, IllegalArgumentException {
 			//the url needs and address and the API key, both of which can be referenced from private access methods below
-			String requestURL = this.getURL()  	+ "address=" + getAddress() 
+			String requestURL = this.getURL()  	+ "address=" + this.getAddress() 
 												+ "&key=" + this.getAPIKey();
 			
 			HttpGet httpGet = new HttpGet(requestURL);
@@ -99,7 +100,7 @@ public class MapCoordinatesHelper {
 		 * @return List of Strings lat + lng 
 		*/
 		public List<String> getLocation() {
-			if(this.operation.equals(MapOperations.geocode) && zeroResults(this.result)) {
+			if(this.operation.equals(MapOperations.geocode)) {
 				List<String> list = new ArrayList<String>();
 				//going through the JSON file, will access lan and lng here
 				JsonObject coords = this.result.get("result").getAsJsonArray().get(0).getAsJsonObject()
@@ -144,9 +145,6 @@ public class MapCoordinatesHelper {
 			return this.region.name();
 		}
 		
-		private final boolean zeroResults(JsonObject obj) {
-			return !obj.get("status").getAsString().equals("ZERO_RESULTS");
-		}
-
+		
 	}
 }

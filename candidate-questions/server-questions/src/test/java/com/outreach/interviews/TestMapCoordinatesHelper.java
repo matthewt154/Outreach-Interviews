@@ -15,7 +15,7 @@ public class TestMapCoordinatesHelper
 {
 	/*
 	 *6 unit tests for different locations to get their coordinates
-	 *3 passes and 3 expected to fall
+	 *3 passes and 3 expected to fail
 	*/
 	@Test
 	//first unit test --> Pass 
